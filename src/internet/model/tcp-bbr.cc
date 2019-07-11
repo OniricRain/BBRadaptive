@@ -44,6 +44,7 @@ bool my_condition;
 bool decreaseLength;
 bool increaseLength;
 uint16_t my_counter = 0;
+double intensity;
 
 //NEW: compute mean
 double
@@ -377,19 +378,29 @@ void TcpBbr::PktsAcked(Ptr<TcpSocketState> tcb, uint32_t packets_acked,
     new_std = computeStd(past_values);
   }
 
-  if ( (bw_est >= 1.20*getBW() && m_probe_factor < 0.80) )
+  intensity = m_pacing_gain - 0.05;
+
+  if ( (bw_est >= intensity*getBW() && m_probe_factor < 0.90) )
   {
-    m_probe_factor += 0.15;
-    m_drain_factor -= 0.15;
+    m_probe_factor += 0.2;
+    m_drain_factor -= 0.2;
   }
   else
   {
     m_probe_factor = 0.25;
     m_drain_factor = 0.25;
   }
-
-  increaseLength = (new_std/past_std < 0.75 && my_condition) ? true : false;
-  decreaseLength = (new_std/past_std > 1.5 && my_condition) ? true : false;
+  increaseLength = (past_std > 0 && new_std > 0 && new_std/past_std < 0.75 && my_condition && past_values.size() == bbr::MY_SIZE) ? true : false;
+  decreaseLength = (past_std > 0 && new_std > 0 && new_std/past_std > 1.25 && my_condition && past_values.size() == bbr::MY_SIZE) ? true : false;
+  if (decreaseLength)
+  {
+    std::cout<< new_std/past_std <<std::endl;
+  }
+  if (increaseLength)
+  {
+    std::cout<< new_std/past_std <<std::endl;
+  }
+  
 
   if (m_isnewcycle && increaseLength && m_cycle_length < 8 && past_values.size() == bbr::MY_SIZE)
   {

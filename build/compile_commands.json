@@ -131,8 +131,8 @@
   }, 
   {
     "directory": "/media/luigius/00945B972482D37C/test/ns-allinone-3.27/ns-3.27/build", 
-    "command": "/usr/bin/g++ -O0 -ggdb -g3 -Wall -Werror -std=c++11 -Wno-error=deprecated-declarations -fstrict-aliasing -Wstrict-aliasing -I../src/traffic-control -fPIC -pthread -I. -I.. -DNS3_BUILD_PROFILE_DEBUG -DNS3_ASSERT_ENABLE -DNS3_LOG_ENABLE -DHAVE_SYS_IOCTL_H=1 -DHAVE_IF_NETS_H=1 -DHAVE_NET_ETHERNET_H=1 -DHAVE_PACKET_H=1 -DHAVE_IF_TUN_H=1 -DHAVE_SQLITE3=1 '-DNS_TEST_SOURCEDIR=\"src/traffic-control/test\"' ../src/traffic-control/test/pie-queue-disc-test-suite.cc -c -o /media/luigius/00945B972482D37C/test/ns-allinone-3.27/ns-3.27/build/src/traffic-control/test/pie-queue-disc-test-suite.cc.3.o", 
-    "file": "../src/traffic-control/test/pie-queue-disc-test-suite.cc"
+    "command": "/usr/bin/g++ -O0 -ggdb -g3 -Wall -Werror -std=c++11 -Wno-error=deprecated-declarations -fstrict-aliasing -Wstrict-aliasing -fPIC -pthread -I. -I.. -I/usr/include/libxml2 -DNS3_BUILD_PROFILE_DEBUG -DNS3_ASSERT_ENABLE -DNS3_LOG_ENABLE -DHAVE_SYS_IOCTL_H=1 -DHAVE_IF_NETS_H=1 -DHAVE_NET_ETHERNET_H=1 -DHAVE_PACKET_H=1 -DHAVE_IF_TUN_H=1 -DHAVE_SQLITE3=1 -DHAVE_LIBXML2=1 ../src/flow-monitor/model/ipv6-flow-probe.cc -c -o /media/luigius/00945B972482D37C/test/ns-allinone-3.27/ns-3.27/build/src/flow-monitor/model/ipv6-flow-probe.cc.1.o", 
+    "file": "../src/flow-monitor/model/ipv6-flow-probe.cc"
   }, 
   {
     "directory": "/media/luigius/00945B972482D37C/test/ns-allinone-3.27/ns-3.27/build", 
@@ -1216,8 +1216,8 @@
   }, 
   {
     "directory": "/media/luigius/00945B972482D37C/test/ns-allinone-3.27/ns-3.27/build", 
-    "command": "/usr/bin/g++ -O0 -ggdb -g3 -Wall -Werror -std=c++11 -Wno-error=deprecated-declarations -fstrict-aliasing -Wstrict-aliasing -fPIC -pthread -I. -I.. -DNS3_BUILD_PROFILE_DEBUG -DNS3_ASSERT_ENABLE -DNS3_LOG_ENABLE -DHAVE_SYS_IOCTL_H=1 -DHAVE_IF_NETS_H=1 -DHAVE_NET_ETHERNET_H=1 -DHAVE_PACKET_H=1 -DHAVE_IF_TUN_H=1 -DHAVE_SQLITE3=1 ../src/wimax/model/ss-net-device.cc -c -o /media/luigius/00945B972482D37C/test/ns-allinone-3.27/ns-3.27/build/src/wimax/model/ss-net-device.cc.1.o", 
-    "file": "../src/wimax/model/ss-net-device.cc"
+    "command": "/usr/bin/g++ -O0 -ggdb -g3 -Wall -Werror -std=c++11 -Wno-error=deprecated-declarations -fstrict-aliasing -Wstrict-aliasing -I../src/traffic-control -fPIC -pthread -I. -I.. -DNS3_BUILD_PROFILE_DEBUG -DNS3_ASSERT_ENABLE -DNS3_LOG_ENABLE -DHAVE_SYS_IOCTL_H=1 -DHAVE_IF_NETS_H=1 -DHAVE_NET_ETHERNET_H=1 -DHAVE_PACKET_H=1 -DHAVE_IF_TUN_H=1 -DHAVE_SQLITE3=1 '-DNS_TEST_SOURCEDIR=\"src/traffic-control/test\"' ../src/traffic-control/test/pie-queue-disc-test-suite.cc -c -o /media/luigius/00945B972482D37C/test/ns-allinone-3.27/ns-3.27/build/src/traffic-control/test/pie-queue-disc-test-suite.cc.3.o", 
+    "file": "../src/traffic-control/test/pie-queue-disc-test-suite.cc"
   }, 
   {
     "directory": "/media/luigius/00945B972482D37C/test/ns-allinone-3.27/ns-3.27/build", 
@@ -2526,6 +2526,11 @@
   }, 
   {
     "directory": "/media/luigius/00945B972482D37C/test/ns-allinone-3.27/ns-3.27/build", 
+    "command": "/usr/bin/g++ -O0 -ggdb -g3 -Wall -Werror -std=c++11 -Wno-error=deprecated-declarations -fstrict-aliasing -Wstrict-aliasing -fPIC -pthread -I. -I.. -DNS3_BUILD_PROFILE_DEBUG -DNS3_ASSERT_ENABLE -DNS3_LOG_ENABLE -DHAVE_SYS_IOCTL_H=1 -DHAVE_IF_NETS_H=1 -DHAVE_NET_ETHERNET_H=1 -DHAVE_PACKET_H=1 -DHAVE_IF_TUN_H=1 -DHAVE_SQLITE3=1 ../src/wimax/model/ss-net-device.cc -c -o /media/luigius/00945B972482D37C/test/ns-allinone-3.27/ns-3.27/build/src/wimax/model/ss-net-device.cc.1.o", 
+    "file": "../src/wimax/model/ss-net-device.cc"
+  }, 
+  {
+    "directory": "/media/luigius/00945B972482D37C/test/ns-allinone-3.27/ns-3.27/build", 
     "command": "/usr/bin/g++ -O0 -ggdb -g3 -Wall -Werror -std=c++11 -Wno-error=deprecated-declarations -fstrict-aliasing -Wstrict-aliasing -I../src/mobility -fPIC -pthread -I. -I.. -DNS3_BUILD_PROFILE_DEBUG -DNS3_ASSERT_ENABLE -DNS3_LOG_ENABLE -DHAVE_SYS_IOCTL_H=1 -DHAVE_IF_NETS_H=1 -DHAVE_NET_ETHERNET_H=1 -DHAVE_PACKET_H=1 -DHAVE_IF_TUN_H=1 -DHAVE_SQLITE3=1 '-DNS_TEST_SOURCEDIR=\"src/mobility/test\"' ../src/mobility/test/steady-state-random-waypoint-mobility-model-test.cc -c -o /media/luigius/00945B972482D37C/test/ns-allinone-3.27/ns-3.27/build/src/mobility/test/steady-state-random-waypoint-mobility-model-test.cc.3.o", 
     "file": "../src/mobility/test/steady-state-random-waypoint-mobility-model-test.cc"
   }, 
@@ -3693,6 +3698,11 @@
     "directory": "/media/luigius/00945B972482D37C/GitWS/BBRadaptive/build", 
     "command": "/usr/bin/g++ -O0 -ggdb -g3 -Wall -Werror -std=c++11 -Wno-error=deprecated-declarations -fstrict-aliasing -Wstrict-aliasing -pthread -I. -I.. -I/usr/include/libxml2 -DNS3_BUILD_PROFILE_DEBUG -DNS3_ASSERT_ENABLE -DNS3_LOG_ENABLE -DHAVE_SYS_IOCTL_H=1 -DHAVE_IF_NETS_H=1 -DHAVE_NET_ETHERNET_H=1 -DHAVE_PACKET_H=1 -DHAVE_IF_TUN_H=1 -DHAVE_SQLITE3=1 -DHAVE_LIBXML2=1 ../src/wimax/examples/wimax-simple.cc -c -o /media/luigius/00945B972482D37C/GitWS/BBRadaptive/build/src/wimax/examples/wimax-simple.cc.3.o", 
     "file": "../src/wimax/examples/wimax-simple.cc"
+  }, 
+  {
+    "directory": "/media/luigius/00945B972482D37C/GitWS/BBRadaptive/build", 
+    "command": "/usr/bin/g++ -O0 -ggdb -g3 -Wall -Werror -std=c++11 -Wno-error=deprecated-declarations -fstrict-aliasing -Wstrict-aliasing -pthread -I. -I.. -I/usr/include/libxml2 -DNS3_BUILD_PROFILE_DEBUG -DNS3_ASSERT_ENABLE -DNS3_LOG_ENABLE -DHAVE_SYS_IOCTL_H=1 -DHAVE_IF_NETS_H=1 -DHAVE_NET_ETHERNET_H=1 -DHAVE_PACKET_H=1 -DHAVE_IF_TUN_H=1 -DHAVE_SQLITE3=1 -DHAVE_LIBXML2=1 ../scratch/try_bulk.cc -c -o /media/luigius/00945B972482D37C/GitWS/BBRadaptive/build/scratch/try_bulk.cc.4.o", 
+    "file": "../scratch/try_bulk.cc"
   }, 
   {
     "directory": "/media/luigius/00945B972482D37C/test/ns-allinone-3.27/ns-3.27/build", 
@@ -5578,11 +5588,6 @@
     "directory": "/media/luigius/00945B972482D37C/test/ns-allinone-3.27/ns-3.27/build", 
     "command": "/usr/bin/g++ -O0 -ggdb -g3 -Wall -Werror -std=c++11 -Wno-error=deprecated-declarations -fstrict-aliasing -Wstrict-aliasing -I../src/internet -fPIC -pthread -I. -I.. -DNS3_BUILD_PROFILE_DEBUG -DNS3_ASSERT_ENABLE -DNS3_LOG_ENABLE -DHAVE_SYS_IOCTL_H=1 -DHAVE_IF_NETS_H=1 -DHAVE_NET_ETHERNET_H=1 -DHAVE_PACKET_H=1 -DHAVE_IF_TUN_H=1 -DHAVE_SQLITE3=1 '-DNS_TEST_SOURCEDIR=\"src/internet/test\"' ../src/internet/test/ipv4-address-helper-test-suite.cc -c -o /media/luigius/00945B972482D37C/test/ns-allinone-3.27/ns-3.27/build/src/internet/test/ipv4-address-helper-test-suite.cc.3.o", 
     "file": "../src/internet/test/ipv4-address-helper-test-suite.cc"
-  }, 
-  {
-    "directory": "/media/luigius/00945B972482D37C/test/ns-allinone-3.27/ns-3.27/build", 
-    "command": "/usr/bin/g++ -O0 -ggdb -g3 -Wall -Werror -std=c++11 -Wno-error=deprecated-declarations -fstrict-aliasing -Wstrict-aliasing -fPIC -pthread -I. -I.. -I/usr/include/libxml2 -DNS3_BUILD_PROFILE_DEBUG -DNS3_ASSERT_ENABLE -DNS3_LOG_ENABLE -DHAVE_SYS_IOCTL_H=1 -DHAVE_IF_NETS_H=1 -DHAVE_NET_ETHERNET_H=1 -DHAVE_PACKET_H=1 -DHAVE_IF_TUN_H=1 -DHAVE_SQLITE3=1 -DHAVE_LIBXML2=1 ../src/flow-monitor/model/ipv6-flow-probe.cc -c -o /media/luigius/00945B972482D37C/test/ns-allinone-3.27/ns-3.27/build/src/flow-monitor/model/ipv6-flow-probe.cc.1.o", 
-    "file": "../src/flow-monitor/model/ipv6-flow-probe.cc"
   }, 
   {
     "directory": "/media/luigius/00945B972482D37C/test/ns-allinone-3.27/ns-3.27/build", 
