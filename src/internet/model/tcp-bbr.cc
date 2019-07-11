@@ -392,15 +392,6 @@ void TcpBbr::PktsAcked(Ptr<TcpSocketState> tcb, uint32_t packets_acked,
   }
   increaseLength = (past_std > 0 && new_std > 0 && new_std/past_std < 0.75 && my_condition && past_values.size() == bbr::MY_SIZE) ? true : false;
   decreaseLength = (past_std > 0 && new_std > 0 && new_std/past_std > 1.25 && my_condition && past_values.size() == bbr::MY_SIZE) ? true : false;
-  if (decreaseLength)
-  {
-    std::cout<< new_std/past_std <<std::endl;
-  }
-  if (increaseLength)
-  {
-    std::cout<< new_std/past_std <<std::endl;
-  }
-  
 
   if (m_isnewcycle && increaseLength && m_cycle_length < 8 && past_values.size() == bbr::MY_SIZE)
   {
