@@ -35,11 +35,44 @@ using namespace ns3;
 NS_LOG_COMPONENT_DEFINE("TcpBbr");
 NS_OBJECT_ENSURE_REGISTERED(TcpBbr);
 
+
+//NEW
+std::vector<uint64_t> past_values = {};
+double past_std;
+double new_std;
+bool my_condition;
+bool decreaseLength;
+bool increaseLength;
+uint16_t my_counter = 0;
+
+//NEW: compute mean
+double
+TcpBbr::computeMean(std::vector<uint64_t> vec) {
+    double sum = 0;
+    for(double a : vec)
+        sum += a;
+    return (double)sum/vec.size();
+}
+//NEW: compute standard deviation
+double 
+TcpBbr::computeStd(std::vector<uint64_t> vec) {
+    double mean = computeMean(vec);
+    double temp = 0;
+    for(double a :vec)
+        temp += (a-mean)*(a-mean);
+    double var = (double)temp/(vec.size()-1);
+    return std::sqrt(var);
+}
+
 // Default constructor.
 TcpBbr::TcpBbr(void) :
   TcpCongestionOps(),
   m_pacing_gain(0.0),
   m_cwnd_gain(0.0),
+  m_probe_factor(0.0),
+  m_drain_factor(0.0),
+  m_cycle_length(0),
+  m_isnewcycle(false),
   m_round(0),
   m_delivered(0),
   m_next_round_delivered(0),
@@ -67,8 +100,8 @@ TcpBbr::TcpBbr(void) :
   NS_LOG_INFO(this << "  STARTUP_THRESHOLD: " << bbr::STARTUP_THRESHOLD);
   NS_LOG_INFO(this << "  STARTUP_GAIN: " << bbr::STARTUP_GAIN);
   NS_LOG_INFO(this << "  STEADY_FACTOR: " << bbr::STEADY_FACTOR);
-  NS_LOG_INFO(this << "  PROBE_FACTOR: " << bbr::PROBE_FACTOR);
-  NS_LOG_INFO(this << "  DRAIN_FACTOR: " << bbr::DRAIN_FACTOR);
+  //NS_LOG_INFO(this << "  PROBE_FACTOR: " << bbr::PROBE_FACTOR);
+  //NS_LOG_INFO(this << "  DRAIN_FACTOR: " << bbr::DRAIN_FACTOR);
   NS_LOG_INFO(this << "  PACING_FACTOR: " << bbr::PACING_FACTOR);
 
   // Timing config (used for culling BW window) in "tcp-bbr.h"
@@ -94,6 +127,10 @@ TcpBbr::TcpBbr(const TcpBbr &sock) :
   TcpCongestionOps(sock),
   m_pacing_gain(0.0),
   m_cwnd_gain(0.0),
+  m_probe_factor(0.0),
+  m_drain_factor(0.0),
+  m_cycle_length(0),
+  m_isnewcycle(false),
   m_round(0),
   m_delivered(0),
   m_next_round_delivered(0),
@@ -311,6 +348,59 @@ void TcpBbr::PktsAcked(Ptr<TcpSocketState> tcb, uint32_t packets_acked,
     bw.round = m_round;
     m_bw_window.push_back(bw);
   }
+
+   
+  //START NEW 
+  // my_condition is true every 3 cycles
+  if (my_counter % 3 == 0)
+  {
+    my_condition = true;
+    my_counter = 1;    
+  }
+  else 
+  {
+    my_condition = false;
+    my_counter += 1;
+  }
+
+  if (my_condition)
+  {
+    past_std = computeStd(past_values);
+  }
+  past_values.push_back(bw_est); //add an element at the end
+  if (past_values.size() > bbr::MY_SIZE)
+  {
+    past_values.erase(past_values.begin()); //remove expired values
+  }
+  if (my_condition)
+  {
+    new_std = computeStd(past_values);
+  }
+
+  if ( (bw_est >= 1.20*getBW() && m_probe_factor < 0.80) )
+  {
+    m_probe_factor += 0.15;
+    m_drain_factor -= 0.15;
+  }
+  else
+  {
+    m_probe_factor = 0.25;
+    m_drain_factor = 0.25;
+  }
+
+  increaseLength = (new_std/past_std < 0.75 && my_condition) ? true : false;
+  decreaseLength = (new_std/past_std > 1.5 && my_condition) ? true : false;
+
+  if (m_isnewcycle && increaseLength && m_cycle_length < 8 && past_values.size() == bbr::MY_SIZE)
+  {
+    m_cycle_length += 1; //stretch the cycle (the cycle can't grow too much)
+  }
+  if (m_isnewcycle && decreaseLength && m_cycle_length > 4 && past_values.size() == bbr::MY_SIZE)
+  {
+    m_cycle_length -= 1; //shrink the cycle (the cycle can't shrink too much)
+  }
+  //END NEW
+
 
   ////////////////////////////////////////////
   // COMPUTE AND SET PACING RATE.

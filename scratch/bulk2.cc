@@ -40,7 +40,7 @@ using namespace ns3;
 #define PACKET_SIZE      1000      // Bytes.
 
 // Uncomment one of the below.
-#define TCP_PROTOCOL     "ns3::TcpBbrAdaptive"
+#define TCP_PROTOCOL     "ns3::TcpBbr"
 //#define TCP_PROTOCOL     "ns3::TcpNewReno"
 
 Ptr<OutputStreamWrapper> inFlightStream;

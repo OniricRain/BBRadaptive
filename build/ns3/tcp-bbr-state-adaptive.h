@@ -1,11 +1,11 @@
 //
-// BbrAdaptiveAdaptiveState.h
+// BbrStateAdaptive.h
 //
 // State machine (and states) for TcpBbrAdaptive.
 //
 
-#ifndef BbrAdaptive_STATE_H
-#define BbrAdaptive_STATE_H
+#ifndef BBR_STATE_H
+#define BBR_STATE_H
 
 #include "ns3/object.h"
 #include "ns3/nstime.h"
@@ -13,12 +13,12 @@
 namespace ns3 {
 
 class TcpBbrAdaptive; 
-class BbrAdaptiveState;
+class BbrStateAdaptive;
 
-namespace BbrAdaptive {
+namespace bbra {
 
-// Defined BbrAdaptive' states.
-enum BbrAdaptive_state {
+// Defined BBR' states.
+enum bbr_state {
   UNDEFINED_STATE=-1,
   STARTUP_STATE,
   DRAIN_STATE,
@@ -26,11 +26,11 @@ enum BbrAdaptive_state {
   PROBE_RTT_STATE,
 };
 
-} // end of namespace BbrAdaptive
+} // end of namespace bbr
 
 ///////////////////////////////////////////////
-// BbrAdaptive' State Machine
-class BbrAdaptiveStateMachine : public Object {
+// BBR' State Machine
+class BbrStateAdaptiveMachine : public Object {
 
  public:
   // Get type id.
@@ -40,26 +40,26 @@ class BbrAdaptiveStateMachine : public Object {
   std::string GetName() const;
 
   // Constructor.
-  BbrAdaptiveStateMachine();
-  BbrAdaptiveStateMachine(TcpBbrAdaptive *owner);
+  BbrStateAdaptiveMachine();
+  BbrStateAdaptiveMachine(TcpBbrAdaptive *owner);
 
   // Change state machine to new state.
-  void changeState(BbrAdaptiveState *p_new_state);
+  void changeState(BbrStateAdaptive *p_new_state);
 
   // Get type of current state.
-  BbrAdaptive::BbrAdaptive_state getStateType() const;
+  bbra::bbr_state getStateType() const;
 
   // Update by executing current state.
   void update();
 
  private:
-  BbrAdaptiveState *m_state;           // Current state.
-  TcpBbrAdaptive *m_owner;             // BbrAdaptive' flow that owns machine.
+  BbrStateAdaptive *m_state;           // Current state.
+  TcpBbrAdaptive *m_owner;             // BBR' flow that owns machine.
 };
 
 ///////////////////////////////////////////////
-// BbrAdaptive' State.
-class BbrAdaptiveState : public Object {
+// BBR' State.
+class BbrStateAdaptive : public Object {
 
  public:
   // Get type id.
@@ -69,14 +69,14 @@ class BbrAdaptiveState : public Object {
   virtual std::string GetName() const;
   
   // Constructors.
-  BbrAdaptiveState();
-  BbrAdaptiveState(TcpBbrAdaptive *owner);
+  BbrStateAdaptive();
+  BbrStateAdaptive(TcpBbrAdaptive *owner);
 
   // Destructor.
-  virtual ~BbrAdaptiveState();
+  virtual ~BbrStateAdaptive();
 
   // Get state type.
-  virtual BbrAdaptive::BbrAdaptive_state getType() const=0;
+  virtual bbra::bbr_state getType() const=0;
 
   // Invoked when state first entered.
   virtual void enter();
@@ -88,13 +88,13 @@ class BbrAdaptiveState : public Object {
   virtual void exit();
 
  protected:
-  TcpBbrAdaptive *m_owner;             // BbrAdaptive' flow that owns state.
+  TcpBbrAdaptive *m_owner;             // BBR' flow that owns state.
 };
 
 ///////////////////////////////////////////////
-// BbrAdaptive' STARTUP state
+// BBR' STARTUP state
 
-class BbrAdaptiveStartupState : public BbrAdaptiveState {
+class BbrStartupState : public BbrStateAdaptive {
 
  public:
   // Get type id.
@@ -104,11 +104,11 @@ class BbrAdaptiveStartupState : public BbrAdaptiveState {
   std::string GetName() const;
   
   // Constructors.
-  BbrAdaptiveStartupState(TcpBbrAdaptive *owner);
-  BbrAdaptiveStartupState();
+  BbrStartupState(TcpBbrAdaptive *owner);
+  BbrStartupState();
 
   // Get state type.
-  BbrAdaptive::BbrAdaptive_state getType() const;
+  bbra::bbr_state getType() const;
 
   // Invoked when state first entered.
   void enter();
@@ -122,9 +122,9 @@ class BbrAdaptiveStartupState : public BbrAdaptiveState {
 };
 
 ///////////////////////////////////////////////
-// BbrAdaptive' DRAIN
+// BBR' DRAIN
 
-class BbrAdaptiveDrainState : public BbrAdaptiveState {
+class BbrDrainState : public BbrStateAdaptive {
 
  public:
   // Get type id.
@@ -134,11 +134,11 @@ class BbrAdaptiveDrainState : public BbrAdaptiveState {
   std::string GetName() const;
   
   // Constructors.
-  BbrAdaptiveDrainState(TcpBbrAdaptive *owner);
-  BbrAdaptiveDrainState();
+  BbrDrainState(TcpBbrAdaptive *owner);
+  BbrDrainState();
 
   // Get state type.
-  BbrAdaptive::BbrAdaptive_state getType() const;
+  bbra::bbr_state getType() const;
 
   // Invoked when state first entered.
   void enter();
@@ -152,9 +152,9 @@ class BbrAdaptiveDrainState : public BbrAdaptiveState {
 };
 
 ///////////////////////////////////////////////
-// BbrAdaptive' PROBE_BW
+// BBR' PROBE_BW
 
-class BbrAdaptiveProbeBWState : public BbrAdaptiveState {
+class BbrProbeBWState : public BbrStateAdaptive {
 
  public:
   // Get type id.
@@ -164,11 +164,11 @@ class BbrAdaptiveProbeBWState : public BbrAdaptiveState {
   std::string GetName() const;
   
   // Constructors.
-  BbrAdaptiveProbeBWState(TcpBbrAdaptive *owner);
-  BbrAdaptiveProbeBWState();
+  BbrProbeBWState(TcpBbrAdaptive *owner);
+  BbrProbeBWState();
 
   // Get state type.
-  BbrAdaptive::BbrAdaptive_state getType() const;
+  bbra::bbr_state getType() const;
 
   // Invoked when state first entered.
   void enter();
@@ -181,9 +181,9 @@ class BbrAdaptiveProbeBWState : public BbrAdaptiveState {
 };
 
 ///////////////////////////////////////////////
-// BbrAdaptive' PROBE_RTT
+// BBR' PROBE_RTT
 
-class BbrAdaptiveProbeRTTState : public BbrAdaptiveState {
+class BbrProbeRTTState : public BbrStateAdaptive {
 
  public:
   // Get type id.
@@ -193,11 +193,11 @@ class BbrAdaptiveProbeRTTState : public BbrAdaptiveState {
   std::string GetName() const;
   
   // Constructors.
-  BbrAdaptiveProbeRTTState(TcpBbrAdaptive *owner);
-  BbrAdaptiveProbeRTTState();
+  BbrProbeRTTState(TcpBbrAdaptive *owner);
+  BbrProbeRTTState();
 
   // Get state type.
-  BbrAdaptive::BbrAdaptive_state getType() const;
+  bbra::bbr_state getType() const;
 
   // Invoked when state first entered.
   void enter();

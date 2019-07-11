@@ -81,8 +81,6 @@
 #include "ripng-helper.h"
 #include "ripng.h"
 #include "rtt-estimator.h"
-#include "tcp-bbr-adaptive.h"
-#include "tcp-bbr-state-adaptive.h"
 #include "tcp-bbr-state.h"
 #include "tcp-bbr.h"
 #include "tcp-bic.h"

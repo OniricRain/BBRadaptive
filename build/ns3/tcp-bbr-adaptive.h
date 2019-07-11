@@ -17,15 +17,15 @@
  *
  */
 
-#ifndef TCP_BbrAdaptive_H
-#define TCP_BbrAdaptive_H
+#ifndef TCP_BBR_H
+#define TCP_BBR_H
 
 #include "tcp-congestion-ops.h"       
 #include "tcp-bbr-state-adaptive.h"            
 
 namespace ns3 {
 
-namespace BbrAdaptive {
+namespace bbra {
 
 ///////////////////////////////////////////////////////////////////
 
@@ -52,8 +52,8 @@ const float PACING_FACTOR = 0.95;     // Factor of BW to pace (for tuning).
 // PROBE_BW state:
 // Gain rates per cycle: [1.25, 0.75, 1, 1, 1, 1, 1, 1]
 const float STEADY_FACTOR = 1.0;      // Steady rate adjustment.
-const float PROBE_FACTOR = 0.25;      // Add when probe.//TODO: change factors
-const float DRAIN_FACTOR = 0.25;      // Decrease when drain.
+float probe_factor = 0.25;      // Add when probe.
+float drain_factor = 0.25;      // Decrease when drain.
   
 // STARTUP state:
 const float STARTUP_THRESHOLD = 1.25; // Threshold to exit STARTUP.
@@ -78,25 +78,25 @@ struct bw_struct {
   double bw_est;           // Bandwidth estimate.
 };
 
-} // end of namespace BbrAdaptive
+} // end of namespace bbr
   
   
 /**
  * \ingroup congestionOps
  *
- * \brief Implementation of basic TCP BbrAdaptive' functionality.
+ * \brief Implementation of basic TCP BBR' functionality.
  *
  */
 class TcpBbrAdaptive : public TcpCongestionOps {
 
 public:
 
-  friend class BbrAdaptiveState;
-  friend class BbrAdaptiveStartupState;
-  friend class BbrAdaptiveDrainState;
-  friend class BbrAdaptiveProbeBWState;
-  friend class BbrAdaptiveProbeRTTState;
-  friend class BbrAdaptiveStateMachine;
+  friend class BbrState;
+  friend class BbrStartupState;
+  friend class BbrDrainState;
+  friend class BbrProbeBWState;
+  friend class BbrProbeRTTState;
+  friend class BbrStateAdaptiveMachine;
 
   // Get type id.
   static TypeId GetTypeId(void);
@@ -126,16 +126,16 @@ public:
   virtual void PktsAcked(Ptr<TcpSocketState> tcb, uint32_t packets_acked,
                          const Time &rtt);
 
-  // Copy BbrAdaptive' congestion control with copy.
+  // Copy BBR' congestion control with copy.
   virtual Ptr<TcpCongestionOps> Fork();
 
-  // BbrAdaptive' ignores calls to increase window.
+  // BBR' ignores calls to increase window.
   virtual void IncreaseWindow(Ptr<TcpSocketState> tcb, uint32_t segs_acked);
 
-  // BbrAdaptive' does not use ssthresh, so ignored.
+  // BBR' does not use ssthresh, so ignored.
   virtual uint32_t GetSsThresh(Ptr<const TcpSocketState> tcb, uint32_t b_in_flight);
 
-  // Events/calculations specific to BbrAdaptive' congestion state.
+  // Events/calculations specific to BBR' congestion state.
   // tcb = transmission control block
   virtual void CongestionStateSet(Ptr<TcpSocketState> tcb, const TcpSocketState::TcpCongState_t new_state);
 
@@ -171,8 +171,8 @@ private:
   int m_delivered;                         // For computing virtual RTT rounds.
   int m_next_round_delivered;              // For computing virtual RTT rounds.
   std::map<Time, Time> m_rtt_window;       // For computing min RTT.
-  std::vector<BbrAdaptive::bw_struct> m_bw_window; // For computing max BW.
-  std::vector<BbrAdaptive::packet_struct> m_pkt_window; // For estimating BW from ACKs.
+  std::vector<bbra::bw_struct> m_bw_window; // For computing max BW.
+  std::vector<bbra::packet_struct> m_pkt_window; // For estimating BW from ACKs.
   uint32_t m_bytes_in_flight;              // Bytes in flight (from socket base).
   Time m_min_rtt_change;                   // Last time min RTT changed.
   double m_cwnd;                           // Current taraget/max cwnd.
@@ -180,13 +180,13 @@ private:
   Time m_packet_conservation;              // Time to stop modulation.
   bool m_in_retrans_seq;                   // True if in retrans seq.
   SequenceNumber32 m_retrans_seq;          // Retrans seq end.
-  BbrAdaptiveStateMachine m_machine;               // State machine.
-  BbrAdaptiveStartupState m_state_startup;         // STARTUP state.
-  BbrAdaptiveDrainState m_state_drain;             // DRAIN state.
-  BbrAdaptiveProbeBWState m_state_probe_bw;        // PROBE_BW state.
-  BbrAdaptiveProbeRTTState m_state_probe_rtt;      // PROBE_RTT state.
+  BbrStateAdaptiveMachine m_machine;       // State machine.
+  BbrStartupState m_state_startup;         // STARTUP state.
+  BbrDrainState m_state_drain;             // DRAIN state.
+  BbrProbeBWState m_state_probe_bw;        // PROBE_BW state.
+  BbrProbeRTTState m_state_probe_rtt;      // PROBE_RTT state.
 };
 
 } // end of namespace ns3
 
-#endif // TCP_BbrAdaptive_H
+#endif // TCP_BBR_H

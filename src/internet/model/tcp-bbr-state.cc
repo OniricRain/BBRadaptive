@@ -14,6 +14,9 @@ using namespace ns3;
 NS_LOG_COMPONENT_DEFINE("BbrState");
 NS_OBJECT_ENSURE_REGISTERED(BbrState);
 
+//extern float probe_factor;
+//extern float drain_factor;
+
 ///////////////////////////////////////////////
 // BBR' State Machine
 // Executes current state through update().
@@ -203,6 +206,9 @@ void BbrStartupState::enter() {
   // Set gains to 2/ln(2).
   m_owner -> m_pacing_gain = bbr::STARTUP_GAIN;
   m_owner -> m_cwnd_gain = bbr::STARTUP_GAIN;
+  m_owner -> m_probe_factor = bbr::PROBE_FACTOR;
+  m_owner -> m_drain_factor = bbr::DRAIN_FACTOR;
+  m_owner -> m_cycle_length = 7;
 }
 
 // Invoked when state updated.
@@ -356,7 +362,7 @@ void BbrProbeBWState::enter() {
   // Pick random start cycle phase (except "low") to avoid synch of
   // flows that enter PROBE_BW simultaneously.
   do {
-    m_gain_cycle = rand() % 8;
+    m_gain_cycle = rand() % m_owner -> m_cycle_length +1;
   } while (m_gain_cycle == 1);  // Phase 1 is "low" cycle.
 
   NS_LOG_LOGIC(this << " " << GetName() << " Start cycle: " << m_gain_cycle);
@@ -364,7 +370,7 @@ void BbrProbeBWState::enter() {
   // Set gains based on phase.
   m_owner -> m_pacing_gain = bbr::STEADY_FACTOR;
   if (m_gain_cycle == 0) // Phase 0 is "high" cycle.
-    m_owner -> m_pacing_gain += bbr::PROBE_FACTOR;
+    m_owner -> m_pacing_gain += m_owner -> m_probe_factor;
   if (PACING_CONFIG == NO_PACING)
     m_owner -> m_cwnd_gain = m_owner -> m_pacing_gain;
   else
@@ -378,12 +384,12 @@ void BbrProbeBWState::execute() {
 
   // Set gain rate: [high, low, stdy, stdy, stdy, stdy, stdy, stdy]
   if (m_gain_cycle == 0)
-    m_owner -> m_pacing_gain = bbr::STEADY_FACTOR + bbr::PROBE_FACTOR;
+    m_owner -> m_pacing_gain = bbr::STEADY_FACTOR + m_owner -> m_probe_factor;
   else if (m_gain_cycle == 1)
     if (PACING_CONFIG == NO_PACING) 
-      m_owner -> m_pacing_gain = bbr::STEADY_FACTOR - bbr::DRAIN_FACTOR/8;
+      m_owner -> m_pacing_gain = bbr::STEADY_FACTOR - m_owner -> m_drain_factor/8;
     else
-      m_owner -> m_pacing_gain = bbr::STEADY_FACTOR - bbr::DRAIN_FACTOR;
+      m_owner -> m_pacing_gain = bbr::STEADY_FACTOR - m_owner -> m_drain_factor;
   else
     m_owner -> m_pacing_gain = bbr::STEADY_FACTOR;
 
@@ -396,8 +402,18 @@ void BbrProbeBWState::execute() {
 
   // Move to next cycle, wrapping.
   m_gain_cycle++;
-  if (m_gain_cycle > 7) //TODO: change length
+  if (m_gain_cycle > m_owner -> m_cycle_length)
+  {
     m_gain_cycle = 0;
+    m_owner -> m_isnewcycle = true;
+  }
+  else
+  {
+    m_owner -> m_isnewcycle = false;
+  }
+  
+
+    
 
   NS_LOG_LOGIC(this << " " <<
 	      GetName() << " DATA pacing-gain: " << m_owner -> m_pacing_gain);
