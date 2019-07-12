@@ -206,8 +206,8 @@ void BbrStartupState::enter() {
   // Set gains to 2/ln(2).
   m_owner -> m_pacing_gain = bbr::STARTUP_GAIN;
   m_owner -> m_cwnd_gain = bbr::STARTUP_GAIN;
-  m_owner -> m_probe_factor = bbr::PROBE_FACTOR;
-  m_owner -> m_drain_factor = bbr::DRAIN_FACTOR;
+  m_owner -> m_probe_factor = 0.25;
+  m_owner -> m_drain_factor = 0.25;
   m_owner -> m_cycle_length = 7;
 }
 
@@ -384,7 +384,10 @@ void BbrProbeBWState::execute() {
 
   // Set gain rate: [high, low, stdy, stdy, stdy, stdy, stdy, stdy]
   if (m_gain_cycle == 0)
+  {
     m_owner -> m_pacing_gain = bbr::STEADY_FACTOR + m_owner -> m_probe_factor;
+    std::cout<<Simulator::Now().GetSeconds() << " " << m_owner -> m_pacing_gain << " " << m_owner -> m_probe_factor << std::endl;
+  }
   else if (m_gain_cycle == 1)
     if (PACING_CONFIG == NO_PACING) 
       m_owner -> m_pacing_gain = bbr::STEADY_FACTOR - m_owner -> m_drain_factor/8;
@@ -411,6 +414,7 @@ void BbrProbeBWState::execute() {
   {
     m_owner -> m_isnewcycle = false;
   }
+  
   
 
     

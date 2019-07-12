@@ -380,7 +380,7 @@ void TcpBbr::PktsAcked(Ptr<TcpSocketState> tcb, uint32_t packets_acked,
 
   intensity = m_pacing_gain - 0.05;
 
-  if ( (bw_est >= intensity*getBW() && m_probe_factor < 0.90) )
+  if ( (m_isnewcycle && bw_est >= intensity*getBW() && m_probe_factor < 0.84) )
   {
     m_probe_factor += 0.2;
     m_drain_factor -= 0.2;
@@ -390,10 +390,10 @@ void TcpBbr::PktsAcked(Ptr<TcpSocketState> tcb, uint32_t packets_acked,
     m_probe_factor = 0.25;
     m_drain_factor = 0.25;
   }
-  increaseLength = (past_std > 0 && new_std > 0 && new_std/past_std < 0.75 && my_condition && past_values.size() == bbr::MY_SIZE) ? true : false;
-  decreaseLength = (past_std > 0 && new_std > 0 && new_std/past_std > 1.25 && my_condition && past_values.size() == bbr::MY_SIZE) ? true : false;
+  increaseLength = (past_std > 0 && new_std > 0 && new_std/past_std < 0.80 && my_condition && past_values.size() == bbr::MY_SIZE) ? true : false;
+  decreaseLength = (past_std > 0 && new_std > 0 && new_std/past_std > 1.32 && my_condition && past_values.size() == bbr::MY_SIZE) ? true : false;
 
-  if (m_isnewcycle && increaseLength && m_cycle_length < 8 && past_values.size() == bbr::MY_SIZE)
+  if (m_isnewcycle && increaseLength && m_cycle_length < 7 && past_values.size() == bbr::MY_SIZE)
   {
     m_cycle_length += 1; //stretch the cycle (the cycle can't grow too much)
   }
@@ -401,6 +401,7 @@ void TcpBbr::PktsAcked(Ptr<TcpSocketState> tcb, uint32_t packets_acked,
   {
     m_cycle_length -= 1; //shrink the cycle (the cycle can't shrink too much)
   }
+  //std::cout<< Simulator::Now().GetSeconds() <<" "<< m_probe_factor<<std::endl;
   //END NEW
 
 

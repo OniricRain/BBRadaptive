@@ -53,8 +53,8 @@ const static uint32_t MY_SIZE = 10;
 // PROBE_BW state:
 // Gain rates per cycle: [1.25, 0.75, 1, 1, 1, 1, 1, 1]
 const float STEADY_FACTOR = 1.0;      // Steady rate adjustment.
-const float PROBE_FACTOR = 0.25;      // Add when probe.
-const float DRAIN_FACTOR = 0.25;      // Decrease when drain.
+//const float PROBE_FACTOR = 0.25;      // Add when probe.
+//const float DRAIN_FACTOR = 0.25;      // Decrease when drain.
   
 // STARTUP state:
 const float STARTUP_THRESHOLD = 1.25; // Threshold to exit STARTUP.
