@@ -48,7 +48,7 @@ const int RTT_WINDOW_TIME = 10;       // In seconds.
 const int BW_WINDOW_TIME = 10;        // In RTTs.
 const int MIN_CWND = 4 * 1000;        // In bytes.
 const float PACING_FACTOR = 0.95;     // Factor of BW to pace (for tuning).
-const static uint32_t MY_SIZE = 10;
+const static uint32_t MY_SIZE = 100;
   
 // PROBE_BW state:
 // Gain rates per cycle: [1.25, 0.75, 1, 1, 1, 1, 1, 1]

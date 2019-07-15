@@ -19,6 +19,7 @@
 
 // System includes.
 #include <iostream>
+#include <fstream>
 
 // NS includes.
 #include "ns3/log.h"
@@ -38,13 +39,18 @@ NS_OBJECT_ENSURE_REGISTERED(TcpBbr);
 
 //NEW
 std::vector<uint64_t> past_values = {};
-double past_std;
-double new_std;
+//double past_std;
+//double new_std;
+double past_mean;
+double new_mean;
 bool my_condition;
 bool decreaseLength;
 bool increaseLength;
 uint16_t my_counter = 0;
+uint16_t counter1 = 0;
+uint16_t counter2 = 0;
 double intensity;
+std::ofstream myfile;
 
 //NEW: compute mean
 double
@@ -333,13 +339,14 @@ void TcpBbr::PktsAcked(Ptr<TcpSocketState> tcb, uint32_t packets_acked,
       i++;
 
   // Estimate BW.
+  double bw_est_b = 0.0;
   double bw_est = 0.0;
   if (do_est_bw) {
 
     // Estimate BW: bw = (W_s - W_a) / (W_t' - W_t)
-    bw_est = (ack - packet.acked) /
+    bw_est_b = (ack - packet.acked) /
              (now.GetSeconds() - packet.time.GetSeconds());
-    bw_est *= 8;          // Convert to b/s.
+    bw_est = bw_est_b * 8;          // Convert to b/s.
     bw_est /= 1000000;    // Convert to Mb/s.
 
     // Add to BW window.
@@ -352,6 +359,45 @@ void TcpBbr::PktsAcked(Ptr<TcpSocketState> tcb, uint32_t packets_acked,
 
    
   //START NEW 
+
+  past_values.push_back(bw_est_b); //add an element at the end
+
+  if (past_values.size() > bbr::MY_SIZE)
+  {
+    past_values.erase(past_values.begin()); //remove expired values
+  }
+
+  if (m_isnewcycle && past_values.size() == bbr::MY_SIZE && (past_values[bbr::MY_SIZE-1] > 1.20*past_values[0]) && m_cycle_length > 3)
+  {
+    m_cycle_length -= 1;
+    //myfile.open("/home/simone/Desktop/cycle.txt", std::ios_base::app);
+    //myfile << Simulator::Now().GetSeconds() <<" "<< m_cycle_length+1 <<std::endl; 
+    //myfile.close();
+  }
+
+  if (m_isnewcycle && past_values.size() == bbr::MY_SIZE && past_values[bbr::MY_SIZE-1] < 1.20*past_values[0] && m_cycle_length <7)
+  {
+    m_cycle_length += 1;
+    //myfile.open("/home/simone/Desktop/cycle.txt", std::ios_base::app);
+    //myfile << Simulator::Now().GetSeconds() <<" "<< m_cycle_length+1 <<std::endl; 
+    //myfile.close();
+  }
+
+  intensity = m_pacing_gain - 0.05; 
+
+  if ( (m_isnewcycle && bw_est >= intensity*getBW() && m_probe_factor < 0.84) )
+  {
+    m_probe_factor += 0.2;
+    m_drain_factor -= 0.2;
+    //std::cout<< Simulator::Now().GetSeconds() <<" "<< intensity <<std::endl; 
+  }
+  else
+  {
+    m_probe_factor = 0.25;
+    m_drain_factor = 0.25;
+  }
+  //END NEW
+    /*START NEW 
   // my_condition is true every 3 cycles
   if (my_counter % 3 == 0)
   {
@@ -401,9 +447,7 @@ void TcpBbr::PktsAcked(Ptr<TcpSocketState> tcb, uint32_t packets_acked,
   {
     m_cycle_length -= 1; //shrink the cycle (the cycle can't shrink too much)
   }
-  //std::cout<< Simulator::Now().GetSeconds() <<" "<< m_probe_factor<<std::endl;
-  //END NEW
-
+  */
 
   ////////////////////////////////////////////
   // COMPUTE AND SET PACING RATE.

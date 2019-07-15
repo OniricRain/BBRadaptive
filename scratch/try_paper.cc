@@ -31,7 +31,7 @@ using namespace ns3;
 #define PACKET_SIZE      1000      // Bytes.
 
 // Uncomment one of the below.
-#define TCP_PROTOCOL     "ns3::TcpBbr"
+//#define TCP_PROTOCOL     "ns3::TcpBbr"
 //#define TCP_PROTOCOL     "ns3::TcpNewReno"
 bool firstRtt = true;
 
@@ -198,7 +198,7 @@ int main (int argc, char *argv[]) {
 
   Simulator::Schedule (Seconds(20) , &DoubleDataRate);
   Simulator::Schedule (Seconds(40) , &HalfDataRate);
-  
+
   // Run simulation.
   NS_LOG_INFO("Running simulation.");
   Simulator::Stop(Seconds(STOP_TIME));

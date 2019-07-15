@@ -41,7 +41,8 @@ using namespace ns3;
 //#define TCP_PROTOCOL     "ns3::TcpBbr"
 //#define TCP_PROTOCOL     "ns3::TcpNewReno"
 bool firstRtt = true;
-std::vector<std::string> datarates = {"100Kbps","200Kbps","500Kbps","1Mbps","5Mbps","10Mbps","20Mbps"};
+//std::vector<std::string> datarates = {"100Kbps","200Kbps","500Kbps","1Mbps","5Mbps","10Mbps","20Mbps"};
+std::vector<std::string> datarates = {"1Mbps","5Mbps","10Mbps","20Mbps"};
 float CasualProb = 0.25;
 
 static void ChangeDataRate ()

@@ -386,7 +386,6 @@ void BbrProbeBWState::execute() {
   if (m_gain_cycle == 0)
   {
     m_owner -> m_pacing_gain = bbr::STEADY_FACTOR + m_owner -> m_probe_factor;
-    std::cout<<Simulator::Now().GetSeconds() << " " << m_owner -> m_pacing_gain << " " << m_owner -> m_probe_factor << std::endl;
   }
   else if (m_gain_cycle == 1)
     if (PACING_CONFIG == NO_PACING) 
@@ -414,10 +413,6 @@ void BbrProbeBWState::execute() {
   {
     m_owner -> m_isnewcycle = false;
   }
-  
-  
-
-    
 
   NS_LOG_LOGIC(this << " " <<
 	      GetName() << " DATA pacing-gain: " << m_owner -> m_pacing_gain);
